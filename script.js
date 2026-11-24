@@ -5,10 +5,10 @@ const quiz = {
   category: 'terminal',
   questions: [
     {
-      question: 'Qual comando lista todos os arquivos, inclusive ocultos, com detalhes e tamanhos legíveis?',
-      answers: ['ls -lah', 'ls -R', 'ls -t', 'dir --all'],
-      correct: 0,
-      explanation: '-l mostra detalhes, -a inclui arquivos ocultos e -h exibe tamanhos legíveis (KB, MB, GB).'
+      question: 'Qual comando abre a interface de texto do NetworkManager, onde é possível editar conexões de rede e definir o hostname?',
+      answers: ['ifconfig', 'nmtui', 'ip addr', 'hostnamectl'],
+      correct: 1,
+      explanation: 'O nmtui abre um menu no terminal para editar conexões, ativá-las e definir o hostname. O hostnamectl só trata do hostname, e ip e ifconfig apenas exibem ou alteram interfaces, sem menu.'
     },
     {
       question: 'Qual comando altera o dono de um arquivo para o usuário ana?',
