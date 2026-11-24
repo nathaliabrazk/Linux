@@ -11,28 +11,94 @@ const quiz = {
       explanation: 'O nmtui abre um menu no terminal para editar conexões, ativá-las e definir o hostname. O hostnamectl só trata do hostname, e ip e ifconfig apenas exibem ou alteram interfaces, sem menu.'
     },
     {
-      question: 'Qual comando altera o dono de um arquivo para o usuário ana?',
-      answers: ['chmod ana arquivo.txt', 'chown ana arquivo.txt', 'usermod ana arquivo.txt', 'chgrp ana arquivo.txt'],
+      question: 'Em qual diretório devem ficar os arquivos de configuração de repositórios do DNF?',
+      answers: ['/etc/dnf/repos/', '/var/lib/dnf/', '/etc/yum.repos.d/', '/usr/share/yum/'],
+      correct: 2,
+      explanation: 'Os repositórios ficam em /etc/yum.repos.d/, em arquivos com extensão .repo. O DNF lê todos eles automaticamente.'
+    },
+    {
+      question: 'Qual extensão o arquivo de repositório precisa ter para ser reconhecido pelo DNF?',
+      answers: ['.conf', '.repo', '.list', '.cfg'],
       correct: 1,
-      explanation: 'chown muda o dono do arquivo. chmod altera permissões e chgrp altera o grupo.'
+      explanation: 'Só arquivos terminados em .repo dentro de /etc/yum.repos.d/ são lidos. O nome antes da extensão pode ser qualquer um, como exam.repo.'
     },
     {
-      question: 'Qual comando mostra o espaço usado em cada partição, em formato legível?',
-      answers: ['du -sh', 'lsblk -f', 'df -h', 'fdisk -l'],
+      question: 'Qual das opções contém uma URL local válida para o campo baseurl de um repositório montado em /mnt/BaseOS?',
+      answers: ['file:/mnt/BaseOS', 'file://mnt/BaseOS', 'file:///mnt/BaseOS', 'local:///mnt/BaseOS'],
       correct: 2,
-      explanation: 'df -h reporta o uso de disco por sistema de arquivos. du mede o tamanho de pastas e arquivos.'
+      explanation: 'O formato é file:// seguido do caminho absoluto, que começa com /. Por isso ficam três barras: file:///mnt/BaseOS. Esquecer uma barra é um erro comum.'
     },
     {
-      question: 'Quais dois comandos servem para consultar a documentação de um comando? Escolha 2 respostas.',
-      answers: ['man', 'cat /etc/doc', '--help', 'locate manual'],
+      question: 'Quais dois campos são necessários, no mínimo, para um repositório funcionar sem verificação de chave GPG? Escolha 2 respostas.',
+      answers: ['baseurl=', 'hostname=', 'enabled=1', 'mirrorlist=none'],
       correct: [0, 2],
-      explanation: 'man abre o manual completo e --help mostra um resumo de uso. Ambos funcionam na maioria dos comandos.'
+      explanation: 'O baseurl diz onde estão os pacotes e o enabled=1 ativa o repositório. Para dispensar a verificação de assinatura, adicione também gpgcheck=0.'
     },
     {
-      question: 'Qual comando busca a palavra "erro" dentro de um arquivo de log, ignorando maiúsculas e minúsculas?',
-      answers: ['find erro log.txt', 'cat -i erro log.txt', 'grep -i erro log.txt', 'sed erro log.txt'],
+      question: 'Depois de criar o arquivo .repo, qual sequência limpa o cache e confirma que os repositórios foram reconhecidos?',
+      answers: ['dnf update && dnf list', 'dnf clean all && dnf repolist', 'dnf reload && dnf info', 'dnf makecache --reset && dnf search'],
+      correct: 1,
+      explanation: 'dnf clean all remove o cache antigo e dnf repolist lista os repositórios ativos. Na prova, BaseOS e AppStream devem aparecer na lista.'
+    },
+    {
+      question: 'Qual comando é o teste mais confiável de que os repositórios BaseOS e AppStream estão funcionando de verdade?',
+      answers: ['cat /etc/yum.repos.d/exam.repo', 'dnf repolist --all', 'dnf install -y httpd', 'systemctl status dnf'],
       correct: 2,
-      explanation: 'grep procura padrões em texto e a opção -i ignora a diferença entre maiúsculas e minúsculas.'
+      explanation: 'Instalar um pacote de verdade prova que o DNF consegue baixar e resolver dependências. O httpd é um bom teste porque está no AppStream.'
+    },
+    {
+      question: 'O enunciado da prova informa que o repositório está em http://content.example.com/rhel10/BaseOS. O que você deve colocar no baseurl?',
+      answers: ['file:///content.example.com/rhel10/BaseOS', 'O endereço HTTP exatamente como foi informado', 'Montar o endereço em /mnt e usar file:///mnt', 'Remover o http:// e usar só o domínio'],
+      correct: 1,
+      explanation: 'Os caminhos da prova podem ser locais (file:///) ou remotos (http://). Leia o enunciado e use o endereço exatamente como foi dado.'
+    },
+    {
+      question: 'Qual linha do /etc/httpd/conf/httpd.conf você altera para o Apache escutar na porta 82?',
+      answers: ['Port 82', 'Listen 82', 'ServerPort 82', 'BindPort 82'],
+      correct: 1,
+      explanation: 'A diretiva que define a porta de escuta do Apache é Listen. Depois de alterar, o serviço precisa ser reiniciado ou iniciado para aplicar.'
+    },
+     {
+      question: 'Qual comando libera a porta TCP 82 para o tipo http_port_t no SELinux?',
+      answers: ['setsebool -P http_port_t 82', 'semanage port -a -t http_port_t -p tcp 82', 'chcon -t http_port_t 82', 'setenforce 82'],
+      correct: 1,
+      explanation: 'O semanage port -a adiciona uma porta a um tipo do SELinux. A opção -t indica o tipo (http_port_t) e -p indica o protocolo (tcp).'
+    },
+    {
+      question: 'Qual comando mostra as portas que o SELinux já permite para o Apache?',
+      answers: ['semanage port -l | grep http_port_t', 'getenforce | grep http', 'ss -tlnp | grep http_port_t', 'firewall-cmd --list-ports'],
+      correct: 0,
+      explanation: 'semanage port -l lista todas as portas e seus tipos, e o grep filtra só as do http_port_t. Vale conferir antes: a 8080 já vem liberada, mas a 82 não.'
+    },
+    {
+      question: 'Qual comando libera a porta TCP 82 para o tipo http_port_t no SELinux?',
+      answers: ['setsebool -P http_port_t 82', 'semanage port -a -t http_port_t -p tcp 82', 'chcon -t http_port_t 82', 'setenforce 82'],
+      correct: 1,
+      explanation: 'O semanage port -a adiciona uma porta a um tipo do SELinux. A opção -t indica o tipo (http_port_t) e -p indica o protocolo (tcp).'
+    },
+    {
+      question: 'Por que, na prova, não se deve usar setenforce 0 para resolver o problema da porta?',
+      answers: ['O comando não existe no RHEL 10', 'A Red Hat penaliza desabilitar o SELinux; o correto é ajustar a política', 'Ele só funciona com o Apache parado', 'Ele fecha a porta no firewall'],
+      correct: 1,
+      explanation: 'setenforce 0 e SELINUX=disabled contornam o problema em vez de resolvê-lo, e a prova considera isso errado. O caminho certo é o semanage para liberar a porta.'
+    },
+    {
+      question: 'O Apache falha ao subir após mudar para a porta 82, com erro de permissão para abrir a porta. Qual a causa mais provável?',
+      answers: ['O firewall está bloqueando a porta', 'A porta 82 não está no tipo http_port_t do SELinux', 'O pacote httpd não foi instalado', 'O diretório /var/www/html está vazio'],
+      correct: 1,
+      explanation: 'Quando o Apache não consegue ocupar a porta, quase sempre é o SELinux. O firewall bloqueia o acesso de fora, mas não impede o serviço de iniciar.'
+    },
+    {
+      question: 'Qual comando restaura o contexto SELinux padrão dos arquivos em /var/www/html, mostrando o que foi alterado?',
+      answers: ['restorecon -Rv /var/www/html/', 'chcon -R /var/www/html/', 'semanage fcontext -l /var/www/html/', 'chmod -R 755 /var/www/html/'],
+      correct: 0,
+      explanation: 'restorecon -Rv reaplica o contexto correto de forma recursiva (-R) e detalhada (-v). Ele não altera o conteúdo dos arquivos, só o rótulo do SELinux.'
+    },
+    {
+      question: 'Qual comando inicia o Apache agora e o habilita para subir automaticamente a cada boot?',
+      answers: ['systemctl start httpd', 'systemctl enable httpd', 'systemctl enable --now httpd', 'service httpd persist'],
+      correct: 2,
+      explanation: 'enable --now faz as duas coisas de uma vez: habilita no boot e inicia imediatamente. Esquecer o enable é uma causa comum de perder pontos, porque o serviço some depois do reinício.'
     }
   ]
 };
