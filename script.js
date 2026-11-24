@@ -1,5 +1,4 @@
 // ===== CONFIGURAÇÃO DO QUIZ =====
-// Para editar: troque os textos abaixo, mantendo o formato.
 // correct: número (uma resposta) ou lista, ex.: [0, 2] (várias respostas). Começa em 0.
 const quiz = {
   title: 'Comandos Linux',
