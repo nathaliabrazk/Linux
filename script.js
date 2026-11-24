@@ -71,12 +71,6 @@ const quiz = {
       explanation: 'semanage port -l lista todas as portas e seus tipos, e o grep filtra só as do http_port_t. Vale conferir antes: a 8080 já vem liberada, mas a 82 não.'
     },
     {
-      question: 'Qual comando libera a porta TCP 82 para o tipo http_port_t no SELinux?',
-      answers: ['setsebool -P http_port_t 82', 'semanage port -a -t http_port_t -p tcp 82', 'chcon -t http_port_t 82', 'setenforce 82'],
-      correct: 1,
-      explanation: 'O semanage port -a adiciona uma porta a um tipo do SELinux. A opção -t indica o tipo (http_port_t) e -p indica o protocolo (tcp).'
-    },
-    {
       question: 'Por que, na prova, não se deve usar setenforce 0 para resolver o problema da porta?',
       answers: ['O comando não existe no RHEL 10', 'A Red Hat penaliza desabilitar o SELinux; o correto é ajustar a política', 'Ele só funciona com o Apache parado', 'Ele fecha a porta no firewall'],
       correct: 1,
